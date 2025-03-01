@@ -1,35 +1,31 @@
-﻿using Ant.AI;
+using Ant.AI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
-public enum AntsColor { Red = 0, Blue = 1, Green = 2 }
 namespace KMU
 {
+    public enum AntColor { Red = 3, Blue = 4, Yellow = 5 }
+
+   
     public class AntsMove : MonoBehaviour
     {
-        private PathFinding pathfinding;
-        [SerializeField] AntsColor antsColor;
-        [SerializeField] private int antsColorIndex;
-
-        [SerializeField] GameObject[] targets;
+        private float speed = 2f;
+        PathFinding pathfinding;
         private int fakeIndex;
-
-        private void Awake()
+        public GameObject[] targets;
+        // Start is called before the first frame update
+        void Start()
         {
-            pathfinding = GetComponent<PathFinding>();
-            fakeIndex = Random.Range(0, targets.Length);
-            pathfinding.target = targets[fakeIndex];
+
         }
 
-        private void Update()
+        // Update is called once per frame
+        void Update()
         {
-            if (pathfinding.isWalking) 
-            {
-                RotateAnts();
-            }
-        }
 
+        }
         // 개미 이동 방향으로 회전
         private void RotateAnts()
         {
@@ -64,6 +60,5 @@ namespace KMU
                 FakeTarget();
             }
         }
-
     }
 }
