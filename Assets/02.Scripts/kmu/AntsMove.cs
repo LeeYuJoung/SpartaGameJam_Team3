@@ -55,12 +55,9 @@ namespace KMU
         {
             if (collision.CompareTag("Goal"))
             {
-                Goal goal = collision.GetComponent<Goal>();
-                if (goal.goalColor == antsColorIndex)
-                {
-                    Destroy(gameObject);
-                    pathfinding.isWalking = false;
-                }
+                Destroy(gameObject);
+                pathfinding.isWalking = false;
+
             }
             else if (collision.CompareTag("FakeGoal"))
             {
