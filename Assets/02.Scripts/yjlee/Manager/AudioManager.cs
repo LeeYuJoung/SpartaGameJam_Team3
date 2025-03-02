@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Team.manager
 {
@@ -38,6 +39,9 @@ namespace Team.manager
             {
                 instance = this;
             }
+
+            int sceneNum = SceneManager.GetActiveScene().buildIndex > 0 ? 1 : 0;
+            PlayBGM(sceneNum);
         }
 
         private void Init()
