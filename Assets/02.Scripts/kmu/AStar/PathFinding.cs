@@ -34,11 +34,17 @@ namespace Ant.AI
         // 상호작용 시 walkable를 false 상태로 변환
         public bool walkable = true;
 
+        public bool isEating = false;
+
+        private Rigidbody2D rigid;
+
         private void Awake()
         {
             walkable = false;
             isWalking = false;
+            rigid = GetComponent<Rigidbody2D>();
         }
+
 
         private void Start()
         {
@@ -47,6 +53,13 @@ namespace Ant.AI
 
         private void FixedUpdate()
         {
+            if (isEating) // 먹이를 먹고있을 때 움직임 멈춤
+            {
+                rigid.velocity = Vector2.zero;
+                StopAllCoroutines();
+                return;
+            }
+
             if (!walkable || target == null)
             {
                 StopAllCoroutines();
@@ -153,7 +166,7 @@ namespace Ant.AI
                 while (wayQueue.Count > 0)
                 {
                     dir = wayQueue.First() - (Vector2)transform.position;
-                    gameObject.GetComponent<Rigidbody2D>().velocity = dir.normalized * moveSpeed * 5 * Time.deltaTime;
+                    rigid.velocity = dir.normalized * moveSpeed * 5 * Time.deltaTime;
 
                     if ((Vector2)transform.position == wayQueue.First())
                     {
