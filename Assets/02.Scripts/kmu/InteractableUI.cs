@@ -10,13 +10,15 @@ namespace KMU
     public class InteractableUI : MonoBehaviour
     {
         [SerializeField] kmu.AntContoller[] antController;
-        [SerializeField] private Material[] colors; // 0 = Red, 1 = Blue, 2 = Green
         [SerializeField] private Button[] spoidButtons; // 스포이드 버튼 배열
 
         [SerializeField] private Button gameStartButton; // 시작 버튼
         [SerializeField] private Button reStartButton; // 재시작 버튼
 
-        [SerializeField] private GameObject shadowSpoid; // 스포이드 그림자
+        // 스포이드
+        [SerializeField] private GameObject shadowSpoid;
+        public SpriteRenderer shadowSpoidRenderer;
+        public Sprite[] waterDrops;
 
         [SerializeField] private Button foodButton;
         [SerializeField] private GameObject foodPrefab;
@@ -40,7 +42,7 @@ namespace KMU
                 spoidButtons[i].onClick.AddListener(() => OnClickSpoid(index));
             }
 
-            foodButton.onClick.AddListener(OnClickFood);
+            foodButton?.onClick.AddListener(OnClickFood);
 
             shadowSpoid.SetActive(false);
             shadowFood.SetActive(false);
@@ -74,7 +76,7 @@ namespace KMU
             {
                 Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                int antLayerMask = ~LayerMask.GetMask("Destination");
+                int antLayerMask = LayerMask.GetMask("Default");
                 RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero, Mathf.Infinity, antLayerMask);
 
 
@@ -84,11 +86,7 @@ namespace KMU
 
                     if (ant != null)
                     {
-                        Renderer antColor = ant.antscarf.GetComponent<Renderer>(); // 스카프 색상
-
                         ant.SetAntColor(selectedColor);
-                        antColor.material = colors[(int)selectedColor];
-
                         CheckGameStart(); // 게임 시작 조건 확인
                     }
                 }
@@ -155,11 +153,8 @@ namespace KMU
             shadowSpoid.SetActive(true);
             selectedColor = (kmu.AntColor)colorIndex; // 선택된 색상 저장
 
-            // 머티리얼 색상 변경
-            if (shadowSpoid.TryGetComponent<Renderer>(out Renderer renderer))
-            {
-                renderer.material = colors[colorIndex]; // 선택한 색상의 머티리얼 적용
-            }
+            shadowSpoidRenderer.sprite = waterDrops[colorIndex];
+
         }
 
         public void OnClickFood()
