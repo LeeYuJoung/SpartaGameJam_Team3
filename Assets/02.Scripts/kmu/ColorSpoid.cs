@@ -87,6 +87,8 @@ namespace KMU
             {
                 if (ants.antColor == null) return;
             }
+
+            gameStartButton.gameObject.SetActive(true);
         }
 
         public void OnClickGameStart()
