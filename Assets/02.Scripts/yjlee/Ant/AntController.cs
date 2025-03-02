@@ -1,11 +1,5 @@
 using Ant.AI;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 namespace yjlee.Ant
 {
@@ -49,6 +43,8 @@ namespace yjlee.Ant
 
             pathFinding.moveSpeed = 20.0f;
             DestinationSettings();
+
+            Application.targetFrameRate = 65;
         }
 
         private void Update()
@@ -80,9 +76,28 @@ namespace yjlee.Ant
 
             if (hit.collider != null)
             {
-                Debug.Log(hit.collider.name);
                 pathFinding.target = hit.transform.gameObject;
                 pathFinding.isWalking = true;
+
+                //if(beforeDestination != null)
+                //{
+                //    if (!ReferenceEquals(hit.collider.gameObject, beforeDestination))
+                //    {
+                //        Debug.Log("No Compare");
+                //        pathFinding.target = hit.transform.gameObject;
+                //        pathFinding.isWalking = true;
+                //    }
+                //    else
+                //    {
+                //        Debug.Log("Compare");
+                //        DestinationSettings();
+                //    }
+                //}
+                //else
+                //{
+                //    pathFinding.target = hit.transform.gameObject;
+                //    pathFinding.isWalking = true;
+                //}
             }
         }
 
@@ -96,33 +111,32 @@ namespace yjlee.Ant
 
             RaycastHit2D hit;
 
-            hit = Physics2D.Raycast(transform.position, -transform.right, 1.0f, 1 << 7);
+            hit = Physics2D.Raycast(transform.position, transform.right, 1.0f, 1 << 7);
             if (hit.collider != null)
             {
-                Debug.Log("Left");
-                transform.Rotate(0, 0, CheckDir(hit.transform));
-                //transform.rotation = Quaternion.Euler(0f, 0f, CheckDir(hit.transform));
+                Debug.Log("Right");
+                transform.Rotate(new Vector3(0.0f, 0.0f, CheckDir(hit.transform)));
+                //transform.rotation = Quaternion.Euler(0.0f, 0.0f, CheckDir(hit.transform));
                 return;
             }
 
             hit = Physics2D.Raycast(transform.position, transform.up, 1.0f, 1 << 7);
             if (hit.collider != null)
             {
-                Debug.Log("forward");
-                //transform.Rotate(0, 0, CheckDir(hit.transform));
-                //transform.rotation = Quaternion.Euler(0f, 0f, CheckDir(hit.transform));
+                Debug.Log("Forward");
                 return;
             }
 
-            hit = Physics2D.Raycast(transform.position, transform.right, 1.0f, 1 << 7);
+            hit = Physics2D.Raycast(transform.position, -transform.right, 1.0f, 1 << 7);
             if (hit.collider != null)
             {
-                Debug.Log("right");
-                transform.Rotate(0, 0, CheckDir(hit.transform));
-                //transform.rotation = Quaternion.Euler(0f, 0f, CheckDir(hit.transform));
+                Debug.Log("Left");
+                transform.Rotate(new Vector3(0.0f, 0.0f, CheckDir(hit.transform)));
+                //transform.rotation = Quaternion.Euler(0.0f, 0.0f, CheckDir(hit.transform));
                 return;
             }
 
+            Debug.Log("None");
             pathFinding.isWalking = false;
             pathFinding.target = null;
 
@@ -133,46 +147,62 @@ namespace yjlee.Ant
         public float CheckDir(Transform target)
         {
             Vector2 dir = transform.position - target.position;
-            dir = dir.normalized;
             Debug.Log(dir);
 
-            if(dir.x > 0.5f)
+            Debug.Log(transform.rotation.eulerAngles.y);
+            if(transform.rotation.eulerAngles.y == 180)
             {
-                Debug.Log("Dir X Left");
-                if (dir.y < 0.0f)
-                    return 90.0f;
-                else
-                    return -90.0f;
-            }
-            else if(dir.x < -0.5f)
-            {
-                Debug.Log("Dir X Right");
-                if (dir.y < 0.0f)
-                    return -90.0f;
-                else
-                    return 90.0f;
-            }
-            else if (dir.y > 0.5f)
-            {
-                Debug.Log("Dir Y Left");
                 if (dir.x > 0.0f)
-                    return 90.0f;
+                {
+                    Debug.Log("Dir Right");
+                    if (dir.y < 0.0f)
+                        return 90.0f;
+                    else
+                        return -90.0f;
+                }
+                else if (dir.x < 0.0f)
+                {
+                    Debug.Log("Dir Left");
+                    if (dir.y < 0.0f)
+                        return 90.0f;
+                    else
+                        return -90.0f;
+                }
                 else
-                    return -90.0f;
-            }
-            else if (dir.y < -0.5f)
-            {
-                Debug.Log("Dir Y Right");
-                if (dir.x > 0.0f)
-                    return -90.0f;
-                else
-                    return 90.0f;
+                {
+                    Debug.Log("Dir Forward");
+                    return 0;
+                }
             }
             else
             {
-                Debug.Log("Dir Forward");
-                return 0;
+                if (dir.x > 0.0f)
+                {
+                    Debug.Log("Dir Right");
+                    if (dir.y < 0.0f)
+                        return -90.0f;
+                    else
+                        return 90.0f;
+                }
+                else if (dir.x < 0.0f)
+                {
+                    Debug.Log("Dir Left");
+                    if (dir.y < 0.0f)
+                        return -90.0f;
+                    else
+                        return 90.0f;
+                }
+                else
+                {
+                    Debug.Log("Dir Forward");
+                    return 0;
+                }
             }
+        }
+
+        public void CheckGoal()
+        {
+
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -183,9 +213,7 @@ namespace yjlee.Ant
                 Search();
 
                 if (beforeDestination != null)
-                {
                     beforeDestination.SetActive(true);
-                }
 
                 beforeDestination = collision.transform.parent.gameObject;
                 beforeDestination.SetActive(false);
@@ -201,5 +229,14 @@ namespace yjlee.Ant
                 antRigidbody.angularVelocity = 0.0f;
             }
         }
+
+        //private void OnTriggerExit2D(Collider2D collision)
+        //{
+        //    if (collision.CompareTag("Stop"))
+        //    {
+        //        if (beforeDestination != null)
+        //            beforeDestination.SetActive(true);
+        //    }
+        //}
     }
 }
