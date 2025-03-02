@@ -27,15 +27,6 @@ namespace KMU
             antAttack = GetComponent<AntsAttack>();
         }
 
-        public void SetAntColor(AntColor antColor)
-        {
-            this.antColor = antColor;
-            antAttack.SetAntColor(antColor);
-
-            pathfinding.target = targets[(int)antColor]; // 목표지점 전달
-
-        }
-
         private void Update()
         {
             if (GameManager.Instance.isGameStart) // 게임 시작 버튼을 눌러야 개미들이 움직임.

@@ -1,6 +1,7 @@
 ﻿using kmu;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Team.manager;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,7 +73,10 @@ namespace KMU
             if (Input.GetMouseButtonDown(0) && isSpoidOn)
             {
                 Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+
+                int antLayerMask = ~LayerMask.GetMask("Destination");
+                RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero, Mathf.Infinity, antLayerMask);
+
 
                 if (hit.collider != null)
                 {
