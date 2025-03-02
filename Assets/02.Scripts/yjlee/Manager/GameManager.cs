@@ -19,6 +19,8 @@ namespace Team.manager
             {
                 instance = this;
             }
+
+            Application.targetFrameRate = 65;
         }
     }
 }
