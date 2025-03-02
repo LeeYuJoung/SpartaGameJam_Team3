@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -27,7 +28,11 @@ namespace Team.manager
 
         [SerializeField] private GameObject[] chapter;
 
+        public GameObject gameOverPanel;
+
         public static GameManager Instance { get { return instance; } }
+
+        public Goal[] goals;
 
         private void Awake()
         {
@@ -114,15 +119,49 @@ namespace Team.manager
         // 게임 승리시 호출
         public void GameClear()
         {
-            if (currentLevelIndex < stageButtons.Length - 1)
+            foreach (Goal goal in goals)
             {
-                currentLevelIndex++;
-                PlayerPrefs.SetInt("UnlockedLevel", currentLevelIndex);
-                PlayerPrefs.Save();
-                UpdateStageButtons();
+                if (goal.antCount > 0)
+                {
+                    return;
+                }
             }
+
+            gameOverPanel.SetActive(true);
+
+            currentLevelIndex++;
+            PlayerPrefs.SetInt("UnlockedLevel", currentLevelIndex);
+            PlayerPrefs.Save();
+
         }
+
+        public void GameOver()
+        {
+            gameOverPanel.SetActive(true);
+        }
+
+        public void OnclickMain()
+        {
+            SceneManager.LoadScene("Main");
+        }
+
+        public void OnClickRetry()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void OnClickExit()
+        {
+#if UNITY_WEBGL
+            Application.OpenURL("about:blank"); 
+#elif UNITY_EDITOR
+            EditorApplication.isPlaying = false; 
+#else
+            Application.Quit();
+#endif
+        }
+
     }
 
-    
+
 }
