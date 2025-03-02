@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
 using UnityEditor;
@@ -16,14 +16,15 @@ namespace Team.manager
 
         public bool isGameStart = false;
 
-        [SerializeField] private Button[] stageButtons; // ½ºÅ×ÀÌÁö ¹öÆ°
-        [SerializeField] private Sprite[] stageLockedSprites; // ½ºÅ×ÀÌÁö Àá±è ÀÌ¹ÌÁö
-        [SerializeField] private Sprite[] stageSprites; // ½ºÅ×ÀÌÁö Àá±è ÇØÁ¦ ÀÌ¹ÌÁö
+        [SerializeField] private Button[] stageButtons; // ìŠ¤í…Œì´ì§€ ë²„íŠ¼
+        [SerializeField] private Sprite[] stageLockedSprites; // ìŠ¤í…Œì´ì§€ ì ê¹€ ì´ë¯¸ì§€
+        [SerializeField] private Sprite[] stageSprites; // ìŠ¤í…Œì´ì§€ ì ê¹€ í•´ì œ ì´ë¯¸ì§€
+        [SerializeField] private Sprite stageClearSpretes;
 
         [SerializeField] private Button rightButton;
         [SerializeField] private Button leftButton;
 
-        private int currentLevelIndex = 0; // ÇöÀç ½ºÅ×ÀÌÁö ·¹º§ ÀÎµ¦½º
+        public int currentLevelIndex = 0; // í˜„ì¬ ìŠ¤í…Œì´ì§€ ë ˆë²¨ ì¸ë±ìŠ¤
         private int currentPage = 0;
 
         [SerializeField] private GameObject[] chapter;
@@ -33,6 +34,9 @@ namespace Team.manager
         public static GameManager Instance { get { return instance; } }
 
         public Goal[] goals;
+
+        public GameObject clearTitle;
+        public GameObject gameOverTitle;
 
         private void Awake()
         {
@@ -51,7 +55,7 @@ namespace Team.manager
             UpdateStageButtons();
         }
 
-        // ½ºÅ×ÀÌÁö ·¹º§ ¹öÆ° ¾÷µ¥ÀÌÆ®
+        // ìŠ¤í…Œì´ì§€ ë ˆë²¨ ë²„íŠ¼ ì—…ë°ì´íŠ¸
         private void UpdateStageButtons()
         {
             for (int i = 0;  i < stageButtons.Length; i++)
@@ -67,9 +71,15 @@ namespace Team.manager
                     stageButtons[i].GetComponent<Image>().sprite = stageLockedSprites[i];
                 }
             }
+
+            for (int i = 0; i < Mathf.Min(currentLevelIndex, stageButtons.Length); i++)
+            {
+                stageButtons[i].GetComponent<Image>().sprite = stageClearSpretes;
+            }
+
         }
 
-        // ¹öÆ° Å¬¸¯À¸·Î ¾À ÀüÈ¯
+        // ë²„íŠ¼ í´ë¦­ìœ¼ë¡œ ì”¬ ì „í™˜
         public void OnClickSceneChange(string sceneName)
         {
             switch (sceneName)
@@ -116,7 +126,7 @@ namespace Team.manager
             
         }
 
-        // °ÔÀÓ ½Â¸®½Ã È£Ãâ
+        // ê²Œì„ ìŠ¹ë¦¬ì‹œ í˜¸ì¶œ
         public void GameClear()
         {
             foreach (Goal goal in goals)
@@ -128,15 +138,22 @@ namespace Team.manager
             }
 
             gameOverPanel.SetActive(true);
+            clearTitle.SetActive(true);
 
-            currentLevelIndex++;
-            PlayerPrefs.SetInt("UnlockedLevel", currentLevelIndex);
-            PlayerPrefs.Save();
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+            if (currentLevelIndex < currentSceneIndex)
+            {
+                currentLevelIndex++;
+                PlayerPrefs.SetInt("UnlockedLevel", currentLevelIndex);
+                PlayerPrefs.Save();
+            }
 
         }
 
         public void GameOver()
         {
+            gameOverTitle.SetActive(true);
             gameOverPanel.SetActive(true);
         }
 
