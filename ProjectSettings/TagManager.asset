@@ -7,7 +7,6 @@ TagManager:
   - Goal
   - Destination
   - Ant
-  - Stop
   layers:
   - Default
   - TransparentFX

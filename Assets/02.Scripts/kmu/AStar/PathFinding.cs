@@ -36,7 +36,7 @@ namespace Ant.AI
 
         private void Awake()
         {
-            walkable = true;
+            walkable = false;
             isWalking = false;
         }
 
