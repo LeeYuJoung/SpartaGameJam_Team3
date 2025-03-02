@@ -86,6 +86,7 @@ namespace KMU
                     if (ant != null)
                     {
                         ant.SetAntColor(selectedColor);
+                        AudioManager.Instance.PlaySFX(GameManager.Instance.audioSource, SFXType.AntColorChange);
                         CheckGameStart(); // 게임 시작 조건 확인
                     }
                 }
@@ -141,6 +142,8 @@ namespace KMU
 
             gameStartButton.gameObject.SetActive(false);
 
+            AudioManager.Instance.PlaySFX(GameManager.Instance.audioSource, SFXType.GameStart);
+
         }
 
 
@@ -152,6 +155,8 @@ namespace KMU
             selectedColor = (kmu.AntColor)colorIndex; // 선택된 색상 저장
 
             shadowSpoidRenderer.sprite = waterDrops[colorIndex];
+
+            AudioManager.Instance.PlaySFX(GameManager.Instance.audioSource, SFXType.GlassClick);
 
         }
 
