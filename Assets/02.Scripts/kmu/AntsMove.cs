@@ -1,6 +1,7 @@
 using Ant.AI;
 using System.Collections;
 using System.Collections.Generic;
+using Team.manager;
 using UnityEditor.Rendering;
 using UnityEngine;
 using yjlee.Ant;
@@ -40,10 +41,11 @@ namespace KMU
 
         private void Update()
         {
-            if (isGameStart) // 게임 시작 버튼을 눌러야 개미들이 움직임.
+            if (GameManager.Instance.isGameStart) // 게임 시작 버튼을 눌러야 개미들이 움직임.
             {
                 pathfinding.isWalking = true;
                 pathfinding.walkable = true;
+                antAttack.attackZone.enabled = true;
             }
 
             if (pathfinding.isWalking)

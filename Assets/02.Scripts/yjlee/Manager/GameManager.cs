@@ -11,6 +11,8 @@ namespace Team.manager
     {
         private static GameManager instance;
 
+        public bool isGameStart = false;
+
         [SerializeField] private Button[] stageButtons; // 스테이지 버튼
         [SerializeField] private Sprite[] stageLockedSprites; // 스테이지 잠김 이미지
         [SerializeField] private Sprite[] stageSprites; // 스테이지 잠김 해제 이미지
@@ -19,7 +21,6 @@ namespace Team.manager
         [SerializeField] private Button leftButton;
 
         private int currentLevelIndex = 0; // 현재 스테이지 레벨 인덱스
-        private int totalChapterPage = 2;
         private int currentPage = 0;
 
         [SerializeField] private GameObject[] chapter;
