@@ -1,13 +1,16 @@
 using Ant.AI;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using yjlee.Ant;
 
-namespace yjlee.Ant
+namespace kmu
 {
     public enum AntColor
     {
         None,
         Red,
-        Green, 
+        Green,
         Blue
     }
 
@@ -23,7 +26,7 @@ namespace yjlee.Ant
         GetEaten   // Àâ¾Æ ¸ÔÈ÷´Ù
     }
 
-    public class AntController : MonoBehaviour
+    public class AntContoller : MonoBehaviour
     {
         public AntColor antColor = AntColor.None;
         public AntState antState = AntState.Idle;
@@ -54,7 +57,7 @@ namespace yjlee.Ant
             {
                 case AntState.Idle:
                     break;
-                 case AntState.Move:
+                case AntState.Move:
                     break;
                 case AntState.Right:
                     break;
@@ -62,7 +65,7 @@ namespace yjlee.Ant
                     break;
                 case AntState.DeadEnd:
                     break;
-                 case AntState.Follow:
+                case AntState.Follow:
                     break;
                 case AntState.GetEaten:
                     break;
@@ -130,7 +133,7 @@ namespace yjlee.Ant
             Debug.Log(dir);
 
             Debug.Log(transform.rotation.eulerAngles.y);
-            if(transform.rotation.eulerAngles.y == 180)
+            if (transform.rotation.eulerAngles.y == 180)
             {
                 if (dir.x > 0.0f)
                 {
