@@ -13,7 +13,6 @@ namespace KMU
         [SerializeField] private Button[] spoidButtons; // 스포이드 버튼 배열
 
         [SerializeField] private Button gameStartButton; // 시작 버튼
-        [SerializeField] private Button reStartButton; // 재시작 버튼
 
         // 스포이드
         [SerializeField] private GameObject shadowSpoid;
@@ -141,7 +140,6 @@ namespace KMU
             spoidAnim.SetTrigger("DoInActive"); // 스포이드 퇴장 애니메이션
 
             gameStartButton.gameObject.SetActive(false);
-            reStartButton.gameObject.SetActive(true);
 
         }
 
