@@ -1,6 +1,8 @@
 using Ant.AI;
+using KMU;
 using System.Collections;
 using System.Collections.Generic;
+using Team.manager;
 using UnityEngine;
 using yjlee.Ant;
 
@@ -8,7 +10,6 @@ namespace kmu
 {
     public enum AntColor
     {
-        None,
         Red,
         Green,
         Blue
@@ -28,20 +29,21 @@ namespace kmu
 
     public class AntContoller : MonoBehaviour
     {
-        public AntColor antColor = AntColor.None;
+        public AntColor ?antColor = null;
         public AntState antState = AntState.Idle;
 
-        private PathFinding2 pathFinding;
+        private PathFinding pathFinding;
         private Rigidbody2D antRigidbody;
         public Transform[] destinations;
 
         public GameObject beforeDestination;
+        public GameObject antscarf;
 
         public bool isStop = false;
 
         private void Awake()
         {
-            pathFinding = GetComponent<PathFinding2>();
+            pathFinding = GetComponent<PathFinding>();
             antRigidbody = GetComponent<Rigidbody2D>();
 
             pathFinding.moveSpeed = 20.0f;
@@ -52,6 +54,12 @@ namespace kmu
 
         private void Update()
         {
+            if (GameManager.Instance.isGameStart) // 게임 시작 버튼을 눌러야 개미들이 움직임.
+            {
+                pathFinding.isWalking = true;
+                pathFinding.walkable = true;
+            }
+
             Debug.DrawRay(transform.position, transform.up * 10.0f, Color.yellow);
             switch (antState)
             {
@@ -70,6 +78,11 @@ namespace kmu
                 case AntState.GetEaten:
                     break;
             }
+        }
+
+        public void SetAntColor(AntColor antColor)
+        {
+            this.antColor = antColor;
         }
 
         public void DestinationSettings()
@@ -183,11 +196,6 @@ namespace kmu
             }
         }
 
-        public void CheckGoal()
-        {
-
-        }
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Ant"))
@@ -212,12 +220,25 @@ namespace kmu
             }
             else if (collision.CompareTag("Goal"))
             {
-                Debug.Log("Goal");
-                pathFinding.isWalking = false;
-                pathFinding.target = null;
+                Goal goal = collision.GetComponent<Goal>();
 
-                antRigidbody.velocity = Vector3.zero;
-                antRigidbody.angularVelocity = 0.0f;
+                if (goal.goalColor == antColor)
+                {
+                    Debug.Log("Goal");
+                    pathFinding.isWalking = false;
+                    pathFinding.target = null;
+
+                    antRigidbody.velocity = Vector3.zero;
+                    antRigidbody.angularVelocity = 0.0f;
+
+                    goal.antCount--;
+                    goal.antCountText.text = goal.antCount.ToString();
+
+                    Destroy(gameObject);
+                }
+                else Debug.Log("GameOver");
+
+
             }
         }
 

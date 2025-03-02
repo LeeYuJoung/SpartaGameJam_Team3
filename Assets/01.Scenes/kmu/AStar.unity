@@ -218,9 +218,9 @@ GameObject:
   - component: {fileID: 113341847}
   - component: {fileID: 113341846}
   - component: {fileID: 113341851}
+  - component: {fileID: 113341852}
   - component: {fileID: 113341850}
   - component: {fileID: 113341849}
-  - component: {fileID: 113341852}
   m_Layer: 0
   m_Name: Ant
   m_TagString: Ant
@@ -401,7 +401,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08503993cd57a2a40986185f5a5fce3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGameStart: 0
   antscarf: {fileID: 527397103}
   targets:
   - {fileID: 1717283813}
@@ -776,7 +775,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08503993cd57a2a40986185f5a5fce3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGameStart: 0
   antscarf: {fileID: 1826600026}
   targets:
   - {fileID: 1717283813}
@@ -1762,7 +1760,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08503993cd57a2a40986185f5a5fce3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGameStart: 0
   antscarf: {fileID: 24493618}
   targets:
   - {fileID: 1717283813}
@@ -2561,6 +2558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae9921ddb38cf504294492a59cb4c6da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  antController: []
   isGameStart: 0
   stageButtons: []
   stageLockedSprites: []
@@ -2724,10 +2722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d81dc80b3c69be42a606df3bc05edf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  antsMove:
-  - {fileID: 113341851}
-  - {fileID: 496558751}
-  - {fileID: 785181336}
+  antController: []
   colors:
   - {fileID: 2100000, guid: 7f16dcfa0220a904c9dcf943b4f8c20d, type: 2}
   - {fileID: 2100000, guid: 89bf155a98efe75408f3067d624a1922, type: 2}
