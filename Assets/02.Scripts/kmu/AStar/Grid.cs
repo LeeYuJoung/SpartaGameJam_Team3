@@ -51,6 +51,11 @@ namespace Ant.AI
                 }
             }
         }
+
+        public void UpdateGrid()
+        {
+            CreateGrid();
+        }
         #endregion
 
         #region node 상하 좌우 대각 노드를 반환하는 함수

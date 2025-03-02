@@ -8,4 +8,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01.Scenes/Team/Main.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/01.Scenes/Team/Stage1.unity
+    guid: c99c2dcbde72b1142aab3bcb090791ad
+  - enabled: 1
+    path: Assets/01.Scenes/Team/Stage2.unity
+    guid: 138c1aa33701ae645a5c7d834e8cfe94
+  - enabled: 1
+    path: Assets/01.Scenes/Team/Stage3.unity
+    guid: 271131acd85653043ab7ce7d0e21eb3c
+  - enabled: 1
+    path: Assets/01.Scenes/Team/Stage4.unity
+    guid: 5c3efe4076e4eba469c265c0babf676c
+  - enabled: 1
+    path: Assets/01.Scenes/Team/Stage5.unity
+    guid: a7a23c6de5d7c9f40bf40283cccc1e49
   m_configObjects: {}
