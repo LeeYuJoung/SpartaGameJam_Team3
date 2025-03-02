@@ -1,5 +1,6 @@
 using Ant.AI;
 using KMU;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Team.manager;
@@ -34,17 +35,21 @@ namespace kmu
 
         private PathFinding pathFinding;
         private Rigidbody2D antRigidbody;
+        private Collider2D antCollider;
         public Transform[] destinations;
 
         public GameObject beforeDestination;
         public GameObject antscarf;
 
         public bool isStop = false;
+        private float eatTime = 5f;
+
 
         private void Awake()
         {
             pathFinding = GetComponent<PathFinding>();
             antRigidbody = GetComponent<Rigidbody2D>();
+            antCollider = GetComponent<Collider2D>();
 
             pathFinding.moveSpeed = 20.0f;
             DestinationSettings();
@@ -83,6 +88,7 @@ namespace kmu
         public void SetAntColor(AntColor antColor)
         {
             this.antColor = antColor;
+            Debug.Log(antColor);
         }
 
         public void DestinationSettings()
@@ -196,15 +202,56 @@ namespace kmu
             }
         }
 
+        private bool IsAttackOther(kmu.AntContoller ants)
+        {
+            if (antColor == kmu.AntColor.Red && ants.antColor == kmu.AntColor.Green) // 개미가 빨간색일 때
+            {
+                return true;
+            }
+            else if (antColor == kmu.AntColor.Blue && ants.antColor == kmu.AntColor.Red) // 개미가 파란색일 때
+            {
+                return true;
+            }
+            else if (antColor == kmu.AntColor.Green && ants.antColor == kmu.AntColor.Blue) // 개미가 초록색일 때
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private IEnumerator EatCoroutine(Collider2D food)
+        {
+
+            pathFinding.isEating = true; // 이동 정지
+            antCollider.enabled = false; // 어택존의 콜라이더 비활성화
+            yield return new WaitForSeconds(eatTime);
+
+            pathFinding.isEating = false; // 이동시작
+            antCollider.enabled = true; // 어택존의 콜라이더 활성화
+
+            Destroy(food.gameObject);
+
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Ant"))
-            {
-                pathFinding.isWalking = false;
-                pathFinding.target = null;
+            if (!GameManager.Instance.isGameStart) return;
 
-                antRigidbody.velocity = Vector3.zero;
-                antRigidbody.angularVelocity = 0.0f;
+            if (collision.CompareTag("Ant")) // 적 공격
+            {
+                kmu.AntContoller ant = collision.GetComponent<kmu.AntContoller>();
+
+                // 공격영역에 접근시 상성 비교
+                if (IsAttackOther(ant))
+                {
+                    Destroy(collision.gameObject);
+                }
+
+            }
+            else if (collision.CompareTag("Food")) // 먹이 반응
+            {
+                collision.enabled = false;
+                StartCoroutine(EatCoroutine(collision));
             }
             else if (collision.CompareTag("Stop"))
             {
