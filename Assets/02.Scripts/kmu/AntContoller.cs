@@ -1,4 +1,5 @@
 using Ant.AI;
+using JetBrains.Annotations;
 using KMU;
 using System;
 using System.Collections;
@@ -47,7 +48,6 @@ namespace kmu
 
         public bool isStop = false;
         private float eatTime = 5f;
-
 
         private void Awake()
         {
@@ -302,8 +302,8 @@ namespace kmu
                     GameManager.Instance.GameOver();
                 }
 
-
             }
+
         }
 
         //private void OnTriggerExit2D(Collider2D collision)

@@ -38,6 +38,8 @@ namespace Team.manager
         public GameObject clearTitle;
         public GameObject gameOverTitle;
 
+        public AudioSource audioSource;
+
         private void Awake()
         {
             if(instance != null)
@@ -64,17 +66,25 @@ namespace Team.manager
                 {
                     stageButtons[i].interactable = true;
                     stageButtons[i].GetComponent<Image>().sprite = stageSprites[i];
+                    stageButtons[i].onClick.AddListener(() => AudioManager.Instance.PlaySFX(audioSource, SFXType.StageClick));
                 }
                 else
                 {
                     stageButtons[i].interactable = false;
                     stageButtons[i].GetComponent<Image>().sprite = stageLockedSprites[i];
+                    stageButtons[i].onClick.AddListener(() => AudioManager.Instance.PlaySFX(audioSource, SFXType.StageLock));
                 }
             }
 
             for (int i = 0; i < Mathf.Min(currentLevelIndex, stageButtons.Length); i++)
             {
                 stageButtons[i].GetComponent<Image>().sprite = stageClearSpretes;
+            }
+
+            for (int i = 2; i < stageButtons.Length; i++)
+            {
+                stageButtons[i].interactable = false;
+                stageButtons[i].GetComponent<Image>().sprite = stageLockedSprites[i];
             }
 
         }
@@ -139,6 +149,7 @@ namespace Team.manager
 
             gameOverPanel.SetActive(true);
             clearTitle.SetActive(true);
+            AudioManager.Instance.PlaySFX(audioSource, SFXType.GameClear);
 
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
@@ -155,6 +166,8 @@ namespace Team.manager
         {
             gameOverTitle.SetActive(true);
             gameOverPanel.SetActive(true);
+            AudioManager.Instance.PlaySFX(audioSource, SFXType.GameOver);
+
         }
 
         public void OnclickMain()
@@ -165,6 +178,8 @@ namespace Team.manager
         public void OnClickRetry()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            AudioManager.Instance.PlaySFX(audioSource, SFXType.GameRestart);
+
         }
 
         public void OnClickExit()
