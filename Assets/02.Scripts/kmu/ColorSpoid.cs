@@ -67,7 +67,6 @@ namespace KMU
 
                         ant.SetAntColor(selectedColor);
                         antColor.material = colors[(int)selectedColor];
-                        Debug.Log($"{ant.gameObject.name} 개미의 색상을 {selectedColor}로 변경!");
 
                         CheckGameStart(); // 게임 시작 조건 확인
                     }
@@ -119,8 +118,6 @@ namespace KMU
             {
                 renderer.material = colors[colorIndex]; // 선택한 색상의 머티리얼 적용
             }
-
-            Debug.Log($"스포이드 색상 선택: {selectedColor}");
         }
     }
 }

@@ -32,7 +32,6 @@ namespace KMU
         public void SetAntColor(AntColor antColor)
         {
             this.antColor = antColor;
-            Debug.Log("이 개미의 색상 : " + antColor);
             antAttack.SetAntColor(antColor);
 
             pathfinding.target = targets[(int)antColor]; // 목표지점 전달
@@ -41,7 +40,7 @@ namespace KMU
 
         private void Update()
         {
-            if (isGameStart)
+            if (isGameStart) // 게임 시작 버튼을 눌러야 개미들이 움직임.
             {
                 pathfinding.isWalking = true;
                 pathfinding.walkable = true;
@@ -65,20 +64,6 @@ namespace KMU
                 Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
-            }
-        }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            Goal goal = collision.GetComponent<Goal>();
-
-            if (goal != null) 
-            {
-                if (goal.goalColor == antColor)  
-                {
-                    Destroy(gameObject);
-                    pathfinding.isWalking = false;
-                }
             }
         }
 
