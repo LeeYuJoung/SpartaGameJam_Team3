@@ -8,6 +8,8 @@ TagManager:
   - Destination
   - Ant
   - Stop
+  - Food
+  - AttackZone
   layers:
   - Default
   - TransparentFX
