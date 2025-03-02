@@ -2,7 +2,10 @@ using Ant.AI;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 namespace yjlee.Ant
 {
@@ -32,17 +35,25 @@ namespace yjlee.Ant
         public AntState antState = AntState.Idle;
 
         private PathFinding2 pathFinding;
+        private Rigidbody2D antRigidbody;
         public Transform[] destinations;
+
+        public GameObject beforeDestination;
+
+        public bool isStop = false;
 
         private void Awake()
         {
             pathFinding = GetComponent<PathFinding2>();
+            antRigidbody = GetComponent<Rigidbody2D>();
+
             pathFinding.moveSpeed = 20.0f;
             DestinationSettings();
         }
 
         private void Update()
         {
+            Debug.DrawRay(transform.position, transform.up * 10.0f, Color.yellow);
             switch (antState)
             {
                 case AntState.Idle:
@@ -65,12 +76,13 @@ namespace yjlee.Ant
         public void DestinationSettings()
         {
             RaycastHit2D hit;
-            hit = Physics2D.Raycast(transform.position, Vector2.up, 10.0f, 1 << 6);
+            hit = Physics2D.Raycast(transform.position, transform.up, 10.0f, 1 << 6);
 
-            if(hit.collider != null)
+            if (hit.collider != null)
             {
-                Debug.Log("Destination Set");
+                Debug.Log(hit.collider.name);
                 pathFinding.target = hit.transform.gameObject;
+                pathFinding.isWalking = true;
             }
         }
 
@@ -79,44 +91,114 @@ namespace yjlee.Ant
             pathFinding.isWalking = false;
             pathFinding.target = null;
 
+            antRigidbody.velocity = Vector3.zero;
+            antRigidbody.angularVelocity = 0.0f;
+
             RaycastHit2D hit;
 
-            hit = Physics2D.Raycast(transform.position, Vector2.left, 1.0f, 1 << 7);
+            hit = Physics2D.Raycast(transform.position, -transform.right, 1.0f, 1 << 7);
             if (hit.collider != null)
             {
                 Debug.Log("Left");
-                pathFinding.isWalking = true;
-                transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-                DestinationSettings();
+                transform.Rotate(0, 0, CheckDir(hit.transform));
+                //transform.rotation = Quaternion.Euler(0f, 0f, CheckDir(hit.transform));
                 return;
             }
 
-            hit = Physics2D.Raycast(transform.position, Vector2.up, 1.0f, 1 << 7);
+            hit = Physics2D.Raycast(transform.position, transform.up, 1.0f, 1 << 7);
             if (hit.collider != null)
             {
                 Debug.Log("forward");
-                pathFinding.isWalking = true;
-                transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                DestinationSettings();
+                //transform.Rotate(0, 0, CheckDir(hit.transform));
+                //transform.rotation = Quaternion.Euler(0f, 0f, CheckDir(hit.transform));
                 return;
             }
 
-            hit = Physics2D.Raycast(transform.position, Vector2.right, 1.0f, 1 << 7);
+            hit = Physics2D.Raycast(transform.position, transform.right, 1.0f, 1 << 7);
             if (hit.collider != null)
             {
                 Debug.Log("right");
-                pathFinding.isWalking = true;
-                transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-                DestinationSettings();
+                transform.Rotate(0, 0, CheckDir(hit.transform));
+                //transform.rotation = Quaternion.Euler(0f, 0f, CheckDir(hit.transform));
                 return;
+            }
+
+            pathFinding.isWalking = false;
+            pathFinding.target = null;
+
+            antRigidbody.velocity = Vector3.zero;
+            antRigidbody.angularVelocity = 0.0f;
+        }
+
+        public float CheckDir(Transform target)
+        {
+            Vector2 dir = transform.position - target.position;
+            dir = dir.normalized;
+            Debug.Log(dir);
+
+            if(dir.x > 0.5f)
+            {
+                Debug.Log("Dir X Left");
+                if (dir.y < 0.0f)
+                    return 90.0f;
+                else
+                    return -90.0f;
+            }
+            else if(dir.x < -0.5f)
+            {
+                Debug.Log("Dir X Right");
+                if (dir.y < 0.0f)
+                    return -90.0f;
+                else
+                    return 90.0f;
+            }
+            else if (dir.y > 0.5f)
+            {
+                Debug.Log("Dir Y Left");
+                if (dir.x > 0.0f)
+                    return 90.0f;
+                else
+                    return -90.0f;
+            }
+            else if (dir.y < -0.5f)
+            {
+                Debug.Log("Dir Y Right");
+                if (dir.x > 0.0f)
+                    return -90.0f;
+                else
+                    return 90.0f;
+            }
+            else
+            {
+                Debug.Log("Dir Forward");
+                return 0;
             }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("FakeGoal"))
+            if (collision.CompareTag("Stop"))
             {
+                Debug.Log("Stop Hit");
                 Search();
+
+                if (beforeDestination != null)
+                {
+                    beforeDestination.SetActive(true);
+                }
+
+                beforeDestination = collision.transform.parent.gameObject;
+                beforeDestination.SetActive(false);
+                DestinationSettings();
+            }
+            else if (collision.CompareTag("Goal"))
+            {
+                Debug.Log("Goal");
+                pathFinding.isWalking = false;
+                pathFinding.target = null;
+
+                antRigidbody.velocity = Vector3.zero;
+                antRigidbody.angularVelocity = 0.0f;
             }
         }
     }
