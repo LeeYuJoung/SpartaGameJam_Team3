@@ -11,6 +11,8 @@ namespace Team.manager
     {
         private static GameManager instance;
 
+        [SerializeField] kmu.AntContoller[] antController;
+
         public bool isGameStart = false;
 
         [SerializeField] private Button[] stageButtons; // 스테이지 버튼
@@ -87,6 +89,7 @@ namespace Team.manager
                     break;
             }
         }
+
 
         public void OnclickChapterMove(bool isRight)
         {
