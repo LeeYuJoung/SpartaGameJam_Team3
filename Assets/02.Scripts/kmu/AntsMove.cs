@@ -3,29 +3,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
+using yjlee.Ant;
 
 namespace KMU
 {
-    public enum AntColor { Red = 3, Blue = 4, Yellow = 5 }
+    public enum AntColor { Red = 0, Blue = 1, Green = 2 }
 
    
     public class AntsMove : MonoBehaviour
     {
-        private float speed = 2f;
+        public bool isGameStart = false;
+
+
+        public AntColor ?antColor; // 개미 색상
+        public GameObject antscarf;
+        public GameObject[] targets; // 골인 지점
+
+        AntsAttack antAttack;
         PathFinding pathfinding;
-        private int fakeIndex;
-        public GameObject[] targets;
-        // Start is called before the first frame update
-        void Start()
+
+        private void Start()
         {
+            antColor = null;
+            pathfinding = GetComponent<PathFinding>();
+            antAttack = GetComponent<AntsAttack>();
+        }
+
+        public void SetAntColor(AntColor antColor)
+        {
+            this.antColor = antColor;
+            Debug.Log("이 개미의 색상 : " + antColor);
+            antAttack.SetAntColor(antColor);
+
+            pathfinding.target = targets[(int)antColor]; // 목표지점 전달
 
         }
 
-        // Update is called once per frame
-        void Update()
+        private void Update()
         {
+            if (isGameStart)
+            {
+                pathfinding.isWalking = true;
+                pathfinding.walkable = true;
+            }
 
+            if (pathfinding.isWalking)
+            {
+                RotateAnts();
+            }
         }
+
         // 개미 이동 방향으로 회전
         private void RotateAnts()
         {
@@ -41,24 +68,19 @@ namespace KMU
             }
         }
 
-        private void FakeTarget()
-        {
-            fakeIndex = Random.Range(0, targets.Length);
-            pathfinding.StartFindPaath(transform.position, targets[fakeIndex].transform.position);
-        }
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Goal"))
-            {
-                Destroy(gameObject);
-                pathfinding.isWalking = false;
+            Goal goal = collision.GetComponent<Goal>();
 
-            }
-            else if (collision.CompareTag("FakeGoal"))
+            if (goal != null) 
             {
-                FakeTarget();
+                if (goal.goalColor == antColor)  
+                {
+                    Destroy(gameObject);
+                    pathfinding.isWalking = false;
+                }
             }
         }
+
     }
 }
