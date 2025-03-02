@@ -11,7 +11,7 @@ namespace KMU
 
     public class AntsAttack : MonoBehaviour
     {
-        private AntColor antColor;
+        private kmu.AntColor antColor;
         public Collider2D attackZone;
         private PathFinding pathfinding;
         private float eatTime = 5f;
@@ -22,23 +22,23 @@ namespace KMU
         }
 
         // 개미 색상 설정
-        public void SetAntColor(AntColor antColor)
+        public void SetAntColor(kmu.AntColor antColor)
         {
             this.antColor = antColor;
         }
 
         // 개미 상성 비교
-        private bool IsAttackOther(AntsMove ants)
+        private bool IsAttackOther(kmu.AntContoller ants)
         {
-            if (antColor == AntColor.Red && ants.antColor == AntColor.Green) // 개미가 빨간색일 때
+            if (antColor == kmu.AntColor.Red && ants.antColor == kmu.AntColor.Green) // 개미가 빨간색일 때
             {
                 return true;
             }
-            else if (antColor == AntColor.Blue && ants.antColor == AntColor.Red) // 개미가 파란색일 때
+            else if (antColor == kmu.AntColor.Blue && ants.antColor == kmu.AntColor.Red) // 개미가 파란색일 때
             {
                 return true;
             }
-            else if (antColor == AntColor.Green && ants.antColor == AntColor.Blue) // 개미가 초록색일 때
+            else if (antColor == kmu.AntColor.Green && ants.antColor == kmu.AntColor.Blue) // 개미가 초록색일 때
             {
                 return true;
             }
@@ -49,12 +49,12 @@ namespace KMU
         {
             if (!GameManager.Instance.isGameStart) return;
 
-            if (collision.CompareTag("AttackZone")) // 적 공격
+            if (collision.CompareTag("Ant")) // 적 공격
             {
-                AntsMove ants = collision.GetComponentInParent<AntsMove>();
+               kmu.AntContoller ant = collision.GetComponent<kmu.AntContoller>();
 
                 // 공격영역에 접근시 상성 비교
-                if (IsAttackOther(ants))
+                if (IsAttackOther(ant))
                 {
                     Destroy(collision.gameObject);
                 }

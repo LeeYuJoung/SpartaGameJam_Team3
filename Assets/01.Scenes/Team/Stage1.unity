@@ -1388,7 +1388,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -300, y: 0}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!4 &852955088 stripped
@@ -1783,7 +1783,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -300, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &1378317550
@@ -1820,12 +1820,12 @@ MonoBehaviour:
   - {fileID: 2041777346}
   colors:
   - {fileID: 2100000, guid: 7f16dcfa0220a904c9dcf943b4f8c20d, type: 2}
-  - {fileID: 2100000, guid: 89bf155a98efe75408f3067d624a1922, type: 2}
   - {fileID: 2100000, guid: 83210a8af719e34498fa15cc5dbf2abc, type: 2}
+  - {fileID: 2100000, guid: 89bf155a98efe75408f3067d624a1922, type: 2}
   spoidButtons:
   - {fileID: 714268422}
-  - {fileID: 1235938610}
   - {fileID: 781978368}
+  - {fileID: 1235938610}
   gameStartButton: {fileID: 1163371339}
   reStartButton: {fileID: 21808048}
   shadowSpoid: {fileID: 1773744018}
@@ -1867,8 +1867,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 714268425}
-  - {fileID: 1235938613}
   - {fileID: 781978371}
+  - {fileID: 1235938613}
   - {fileID: 77392101}
   m_Father: {fileID: 2124633806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2414,7 +2414,6 @@ GameObject:
   - component: {fileID: 2041777341}
   - component: {fileID: 2041777345}
   - component: {fileID: 2041777346}
-  - component: {fileID: 2041777347}
   m_Layer: 0
   m_Name: Ant
   m_TagString: Ant
@@ -2590,19 +2589,6 @@ MonoBehaviour:
   beforeDestination: {fileID: 0}
   antscarf: {fileID: 1868780599}
   isStop: 0
---- !u!114 &2041777347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2041777338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e488d11857886c4481f7dc5a5909d4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackZone: {fileID: 2041777342}
 --- !u!1 &2124633802
 GameObject:
   m_ObjectHideFlags: 0
