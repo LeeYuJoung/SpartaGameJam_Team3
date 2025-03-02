@@ -3,6 +3,7 @@ using KMU;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Team.manager;
 using UnityEngine;
 
 namespace KMU
@@ -11,7 +12,7 @@ namespace KMU
     public class AntsAttack : MonoBehaviour
     {
         private AntColor antColor;
-        [SerializeField] private Collider2D attackZone;
+        public Collider2D attackZone;
         private PathFinding pathfinding;
         private float eatTime = 5f;
 
@@ -46,6 +47,8 @@ namespace KMU
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if (!GameManager.Instance.isGameStart) return;
+
             if (collision.CompareTag("AttackZone")) // Àû °ø°Ý
             {
                 AntsMove ants = collision.GetComponentInParent<AntsMove>();

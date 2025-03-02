@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Runtime.InteropServices.WindowsRuntime;
+using Team.manager;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace KMU
 {
-    public class ColorSpoid : MonoBehaviour
+    public class InteractableUI : MonoBehaviour
     {
         [SerializeField] AntsMove[] antsMove; // 스테이지의 모든 개미
         [SerializeField] private Material[] colors; // 0 = Red, 1 = Blue, 2 = Green
@@ -13,6 +15,12 @@ namespace KMU
         [SerializeField] private Button reStartButton; // 재시작 버튼
 
         [SerializeField] private GameObject shadowSpoid; // 스포이드 그림자
+
+        [SerializeField] private Button foodButton;
+        [SerializeField] private GameObject foodPrefab;
+        [SerializeField] private GameObject shadowFood;
+        public int foodCount = 0;
+        private bool isFoodOn = false;
 
         private AntColor selectedColor; // 선택된 색상
         private bool isSpoidOn = false;
@@ -30,17 +38,20 @@ namespace KMU
                 spoidButtons[i].onClick.AddListener(() => OnClickSpoid(index));
             }
 
+            foodButton.onClick.AddListener(OnClickFood);
+
             shadowSpoid.SetActive(false);
+            shadowFood.SetActive(false);
 
             spoidAnim.SetTrigger("DoActive"); // 스포이드 등장 애니메이션
         }
 
         private void Update()
         {
-            SpoidControl();
+            UIObjectControl();
         }
 
-        private void SpoidControl()
+        private void UIObjectControl()
         {
             Vector3 mousePosition = Input.mousePosition;
 
@@ -49,6 +60,11 @@ namespace KMU
                 // 마우스 위치를 따라다니기
                 mousePosition.z = 10f;
                 shadowSpoid.transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
+            }
+            else if (isFoodOn)
+            {
+                mousePosition.z = 10f;
+                shadowFood.transform.position = Camera.main.ScreenToWorldPoint(mousePosition);
             }
 
             // 마우스를 클릭하면 개미의 색상을 변경
@@ -76,6 +92,30 @@ namespace KMU
                 isSpoidOn = false;
                 shadowSpoid.SetActive(false);
             }
+
+            else if (Input.GetMouseButtonDown(0) && isFoodOn) // 먹이 놓기
+            {
+                Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+
+                Ant.AI.Node clickedNode = FindObjectOfType<Ant.AI.Grid>().NodeFromWorldPoint(worldPoint);
+                
+                if (clickedNode != null) // 그리드의 노드가 있는 곳에만
+                {
+                    if (!clickedNode.isWalkable || hit.collider != null) // 노드가 이동 가능하고 다른 콜라이더가 없는 곳에만
+                    {
+                        isFoodOn = false;
+                        shadowFood.SetActive(false);
+                        return;
+                    }
+
+                    Instantiate(foodPrefab, clickedNode.worldPosition, Quaternion.identity);
+                    foodCount--;
+                }
+
+                isFoodOn = false;
+                shadowFood.SetActive(false);
+            }
         }
 
         // 게임 스타트 버튼
@@ -92,11 +132,7 @@ namespace KMU
 
         public void OnClickGameStart()
         {
-            // 게임 시작
-            foreach (AntsMove ants in antsMove)
-            {
-                ants.isGameStart = true;
-            }
+            GameManager.Instance.isGameStart = true;
 
             spoidAnim.SetTrigger("DoInActive"); // 스포이드 퇴장 애니메이션
 
@@ -118,6 +154,13 @@ namespace KMU
             {
                 renderer.material = colors[colorIndex]; // 선택한 색상의 머티리얼 적용
             }
+        }
+
+        public void OnClickFood()
+        {
+            if (foodCount == 0) return;
+            isFoodOn = true;
+            shadowFood.SetActive(true);
         }
     }
 }
