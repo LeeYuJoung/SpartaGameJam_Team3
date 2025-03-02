@@ -178,10 +178,23 @@ namespace yjlee.Ant
                 else if (dir.x < 0.0f)
                 {
                     Debug.Log("Dir Left");
-                    if (dir.y < 0.0f)
-                        return -90.0f;
+
+                    if (dir.x < -0.5f)
+                    {
+                        Debug.Log("Dir Left");
+                        if (dir.y <= -0.3f)
+                            return 90.0f;
+                        else
+                            return -90.0f;
+                    }
                     else
-                        return 90.0f;
+                    {
+                        Debug.Log("Dir Left");
+                        if (dir.y <= -0.5f)
+                            return 90.0f;
+                        else
+                            return -90.0f;
+                    }
                 }
                 else
                 {
@@ -191,9 +204,17 @@ namespace yjlee.Ant
             }
         }
 
-        public void CheckGoal()
+        public void CheckAnt(GameObject ant)
         {
+            AntController antController = ant.GetComponent<AntController>();
 
+            if(antController != null)
+            {
+                if( antController.antColor == antColor )
+                {
+
+                }
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -205,6 +226,8 @@ namespace yjlee.Ant
 
                 antRigidbody.velocity = Vector3.zero;
                 antRigidbody.angularVelocity = 0.0f;
+
+
             }
             else if (collision.CompareTag("Stop"))
             {
