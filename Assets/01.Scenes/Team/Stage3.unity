@@ -4587,7 +4587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb695a793ccf6448ba87af3383abc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  antColor: 0
+  antColor: 1
   antState: 0
   destinations:
   - {fileID: 0}
@@ -4720,7 +4720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb695a793ccf6448ba87af3383abc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  antColor: 0
+  antColor: 1
   antState: 0
   destinations:
   - {fileID: 0}

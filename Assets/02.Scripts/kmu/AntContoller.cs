@@ -39,7 +39,11 @@ namespace kmu
         public Transform[] destinations;
 
         public GameObject beforeDestination;
-        public GameObject antscarf;
+
+        public Animator controller;
+        public RuntimeAnimatorController[] antAnim;
+        public SpriteRenderer antSpriteRenderer;
+        public Sprite[] antSprite;
 
         public bool isStop = false;
         private float eatTime = 5f;
@@ -88,6 +92,8 @@ namespace kmu
         public void SetAntColor(AntColor antColor)
         {
             this.antColor = antColor;
+            antSpriteRenderer.sprite = antSprite[(int)antColor];
+            controller.runtimeAnimatorController = antAnim[(int)antColor];
             Debug.Log(antColor);
         }
 
@@ -282,8 +288,19 @@ namespace kmu
                     goal.antCountText.text = goal.antCount.ToString();
 
                     Destroy(gameObject);
+
+                    GameManager.Instance.GameClear();
                 }
-                else Debug.Log("GameOver");
+                else
+                {
+                    pathFinding.isWalking = false;
+                    pathFinding.target = null;
+
+                    antRigidbody.velocity = Vector3.zero;
+                    antRigidbody.angularVelocity = 0.0f;
+
+                    GameManager.Instance.GameOver();
+                }
 
 
             }

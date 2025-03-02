@@ -212,7 +212,12 @@ namespace yjlee.Ant
             {
                 if( antController.antColor == antColor )
                 {
+                    Debug.Log("Ant");
+                    pathFinding.isWalking = false;
+                    pathFinding.target = null;
 
+                    antRigidbody.velocity = Vector3.zero;
+                    antRigidbody.angularVelocity = 0.0f;
                 }
             }
         }
@@ -221,13 +226,7 @@ namespace yjlee.Ant
         {
             if (collision.CompareTag("Ant"))
             {
-                pathFinding.isWalking = false;
-                pathFinding.target = null;
-
-                antRigidbody.velocity = Vector3.zero;
-                antRigidbody.angularVelocity = 0.0f;
-
-
+                CheckAnt(collision.gameObject);
             }
             else if (collision.CompareTag("Stop"))
             {
