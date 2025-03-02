@@ -65,17 +65,6 @@ namespace KMU
                 collision.enabled = false;
                 StartCoroutine(EatCoroutine(collision));
             }
-            else if (collision.CompareTag("Goal")) // 목적지 도착
-            {
-                Goal goal = collision.GetComponent<Goal>();
-
-                if (goal.goalColor == antColor)
-                {
-                    Destroy(gameObject);
-                    pathfinding.isWalking = false;
-                }
-            }
-
             
         }
 

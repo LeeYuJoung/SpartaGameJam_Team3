@@ -13,9 +13,6 @@ namespace KMU
    
     public class AntsMove : MonoBehaviour
     {
-        public bool isGameStart = false;
-
-
         public AntColor ?antColor; // 개미 색상
         public GameObject antscarf;
         public GameObject[] targets; // 골인 지점

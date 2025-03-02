@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices.WindowsRuntime;
+﻿using kmu;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Team.manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ namespace KMU
 {
     public class InteractableUI : MonoBehaviour
     {
-        [SerializeField] AntsMove[] antsMove; // 스테이지의 모든 개미
+        [SerializeField] kmu.AntContoller[] antController;
         [SerializeField] private Material[] colors; // 0 = Red, 1 = Blue, 2 = Green
         [SerializeField] private Button[] spoidButtons; // 스포이드 버튼 배열
 
@@ -22,7 +23,7 @@ namespace KMU
         public int foodCount = 0;
         private bool isFoodOn = false;
 
-        private AntColor selectedColor; // 선택된 색상
+        private kmu.AntColor selectedColor; // 선택된 색상
         private bool isSpoidOn = false;
 
         private Animator spoidAnim;
@@ -75,7 +76,7 @@ namespace KMU
 
                 if (hit.collider != null)
                 {
-                    AntsMove ant = hit.collider.GetComponent<AntsMove>();
+                    kmu.AntContoller ant = hit.collider.GetComponent<AntContoller>();
 
                     if (ant != null)
                     {
@@ -122,12 +123,13 @@ namespace KMU
         public void CheckGameStart()
         {
             // 하나라도 색상 설정이 안되면 return
-            foreach (AntsMove ants in antsMove)
+            foreach (kmu.AntContoller ants in antController)
             {
                 if (ants.antColor == null) return;
             }
 
             gameStartButton.gameObject.SetActive(true);
+                      
         }
 
         public void OnClickGameStart()
@@ -147,7 +149,7 @@ namespace KMU
         {
             isSpoidOn = true;
             shadowSpoid.SetActive(true);
-            selectedColor = (AntColor)colorIndex; // 선택된 색상 저장
+            selectedColor = (kmu.AntColor)colorIndex; // 선택된 색상 저장
 
             // 머티리얼 색상 변경
             if (shadowSpoid.TryGetComponent<Renderer>(out Renderer renderer))
