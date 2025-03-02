@@ -135,18 +135,29 @@ namespace yjlee.Ant
                 if (dir.x > 0.0f)
                 {
                     Debug.Log("Dir Right");
-                    if (dir.y < 0.2f)
+                    if (dir.y <= 0.4f)
                         return 90.0f;
                     else
                         return -90.0f;
                 }
-                else if (dir.x < 0.0f)
+                else if (dir.x < -0.0f)
                 {
-                    Debug.Log("Dir Left");
-                    if (dir.y < 0.2f)
-                        return 90.0f;
+                    if(dir.x < -0.5f)
+                    {
+                        Debug.Log("Dir Left");
+                        if (dir.y <= -0.3f)
+                            return 90.0f;
+                        else
+                            return -90.0f;
+                    }
                     else
-                        return -90.0f;
+                    {
+                        Debug.Log("Dir Left");
+                        if (dir.y <= -0.5f)
+                            return 90.0f;
+                        else
+                            return -90.0f;
+                    }
                 }
                 else
                 {
